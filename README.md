@@ -109,7 +109,7 @@ import { ethers } from 'ethers';
 import 'dotenv/config';
 
 // Create wallet instances
-const provider = new ethers.JsonRpcProvider(process.env.EVM_RPC_URL!);
+const provider = new ethers.providers.JsonRpcProvider(process.env.EVM_RPC_URL!);
 const evmWallet = createEVMWallet(process.env.EVM_PRIVATE_KEY!, provider);
 
 // For Solana - create wallet instance (implementation may vary)
