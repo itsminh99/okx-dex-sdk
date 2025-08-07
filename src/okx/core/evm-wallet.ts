@@ -22,12 +22,12 @@ export class PrivateKeyWallet implements EVMWallet {
   constructor(
     privateKey: string,
     provider: ethers.providers.JsonRpcProvider,
-    rpcProvider: ethers.providers.JsonRpcProvider
+    rpcProvider?: ethers.providers.JsonRpcProvider
   ) {
     this.signer = new ethers.Wallet(privateKey, provider);
     this.address = this.signer.address;
     this.provider = provider;
-    this.rpcProvider = rpcProvider;
+    this.rpcProvider = rpcProvider || provider;
   }
 
   async signTransaction(
@@ -50,7 +50,7 @@ export class PrivateKeyWallet implements EVMWallet {
 export function createEVMWallet(
   privateKey: string,
   provider: ethers.providers.JsonRpcProvider,
-  rpcProvider: ethers.providers.JsonRpcProvider
+  rpcProvider?: ethers.providers.JsonRpcProvider
 ): EVMWallet {
   return new PrivateKeyWallet(privateKey, provider, rpcProvider);
 }
