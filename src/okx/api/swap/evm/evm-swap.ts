@@ -149,6 +149,10 @@ export class EVMSwapExecutor implements SwapExecutor {
           error.message
         );
 
+        if (error.code == "ACTION_REJECTED") {
+          throw error;
+        }
+
         if (error.code === "INSUFFICIENT_FUNDS") {
           throw new Error("Insufficient funds for transaction");
         }

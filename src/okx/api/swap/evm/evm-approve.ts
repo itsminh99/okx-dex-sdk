@@ -175,14 +175,16 @@ export class EVMApproveExecutor implements SwapExecutor {
         );
 
         return receipt;
-      } catch (error) {
+      } catch (error: any) {
         retryCount++;
         console.warn(
           `Approval attempt ${retryCount} failed, retrying in ${
             2000 * retryCount
           }ms...`
         );
-        if (retryCount === maxRetries) throw error;
+
+        if (error?.code === "ACTION_REJECTED" || retryCount === maxRetries)
+          throw error;
         await new Promise((resolve) => setTimeout(resolve, 2000 * retryCount));
       }
     }
