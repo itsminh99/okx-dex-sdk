@@ -3,6 +3,7 @@ import { ethers } from "ethers";
 export interface EVMWallet {
   readonly address: string;
   readonly provider: ethers.providers.JsonRpcProvider;
+  readonly rpcProvider: ethers.providers.JsonRpcProvider;
   signTransaction(
     transaction: ethers.providers.TransactionRequest
   ): Promise<string>;
@@ -15,12 +16,18 @@ export interface EVMWallet {
 export class PrivateKeyWallet implements EVMWallet {
   public readonly address: string;
   public readonly provider: ethers.providers.JsonRpcProvider;
+  public readonly rpcProvider: ethers.providers.JsonRpcProvider;
   private readonly signer: ethers.Wallet;
 
-  constructor(privateKey: string, provider: ethers.providers.JsonRpcProvider) {
+  constructor(
+    privateKey: string,
+    provider: ethers.providers.JsonRpcProvider,
+    rpcProvider: ethers.providers.JsonRpcProvider
+  ) {
     this.signer = new ethers.Wallet(privateKey, provider);
     this.address = this.signer.address;
     this.provider = provider;
+    this.rpcProvider = rpcProvider;
   }
 
   async signTransaction(
@@ -42,7 +49,8 @@ export class PrivateKeyWallet implements EVMWallet {
 
 export function createEVMWallet(
   privateKey: string,
-  provider: ethers.providers.JsonRpcProvider
+  provider: ethers.providers.JsonRpcProvider,
+  rpcProvider: ethers.providers.JsonRpcProvider
 ): EVMWallet {
-  return new PrivateKeyWallet(privateKey, provider);
+  return new PrivateKeyWallet(privateKey, provider, rpcProvider);
 }

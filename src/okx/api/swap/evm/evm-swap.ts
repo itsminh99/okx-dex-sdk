@@ -10,6 +10,7 @@ import {
 
 export class EVMSwapExecutor implements SwapExecutor {
   private readonly provider: ethers.providers.JsonRpcProvider;
+  private readonly rpcProvider: ethers.providers.JsonRpcProvider;
   private readonly DEFAULT_GAS_MULTIPLIER = ethers.BigNumber.from(150); // 1.5x
 
   constructor(
@@ -20,6 +21,7 @@ export class EVMSwapExecutor implements SwapExecutor {
       throw new Error("EVM configuration required");
     }
     this.provider = this.config.evm.wallet.provider;
+    this.rpcProvider = this.config.evm.wallet.rpcProvider;
   }
 
   async executeSwap(
@@ -109,7 +111,7 @@ export class EVMSwapExecutor implements SwapExecutor {
         const maxAttempts = 30;
 
         while (attempts < maxAttempts) {
-          receipt = await this.provider.getTransactionReceipt(response.hash);
+          receipt = await this.rpcProvider.getTransactionReceipt(response.hash);
 
           if (receipt) {
             console.log(
@@ -119,9 +121,11 @@ export class EVMSwapExecutor implements SwapExecutor {
             return receipt;
           }
 
-          const pendingTx = await this.provider.getTransaction(response.hash);
+          const pendingTx = await this.rpcProvider.getTransaction(
+            response.hash
+          );
           if (!pendingTx) {
-            const network = await this.provider.getNetwork();
+            const network = await this.rpcProvider.getNetwork();
             console.error(
               `Transaction dropped. Network: ${network.name} (${network.chainId})`
             );
