@@ -53,7 +53,7 @@ export class EVMSwapExecutor implements SwapExecutor {
 
     let retryCount = 0;
     const maxRetries = this.networkConfig.maxRetries || 3;
-    const gasMultiplier = ethers.BigNumber.from(500); // 5x
+    const gasMultiplier = ethers.BigNumber.from(110); //
 
     while (retryCount < maxRetries) {
       try {
@@ -62,6 +62,8 @@ export class EVMSwapExecutor implements SwapExecutor {
         const nonce = await this.provider.getTransactionCount("latest");
 
         const feeData = await this.provider.getFeeData();
+        console.log("Fee data:", feeData);
+
         const baseFee = feeData.maxFeePerGas || ethers.BigNumber.from(0);
         const priorityFee =
           feeData.maxPriorityFeePerGas || ethers.BigNumber.from("3000000000"); // 3 gwei
