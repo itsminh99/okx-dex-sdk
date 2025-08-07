@@ -59,9 +59,7 @@ export class EVMSwapExecutor implements SwapExecutor {
       try {
         console.log("Preparing transaction...");
 
-        const nonce = await this.provider.getTransactionCount(
-          this.config.evm.wallet.address
-        );
+        const nonce = await this.provider.getTransactionCount("latest");
 
         const feeData = await this.provider.getFeeData();
         const baseFee = feeData.maxFeePerGas || ethers.BigNumber.from(0);
