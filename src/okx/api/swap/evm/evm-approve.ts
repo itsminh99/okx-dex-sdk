@@ -137,7 +137,7 @@ export class EVMApproveExecutor implements SwapExecutor {
       throw new Error("EVM wallet required");
     }
 
-    const wallet = this.config.evm.wallet;
+    const wallet = this.config.evm.wallet.provider;
     const tokenContract = new ethers.Contract(
       tokenAddress,
       ERC20_ABI,
